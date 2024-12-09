@@ -4,9 +4,9 @@
 - Java 23
 
 * (start DAULE) docker run -d --name broker apache/kafka:latest
-* docker start broker
-* (Stop) docker stop broker
-* docker exec --workdir /opt/kafka/bin/ -it broker sh
+* docker start brokerKafka
+* (Stop) docker stop brokerKafka
+* docker exec --workdir /opt/kafka/bin/ -it brokerKafka sh
   
 * DURAN
   

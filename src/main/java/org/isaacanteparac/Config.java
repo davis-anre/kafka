@@ -2,7 +2,7 @@ package org.isaacanteparac;
 
 public enum Config {
     ID_CONFIG("kafka_examen"),
-    IP("192.168.1.4"),
+    IP("192.168.1.7"),
     PORT("9092"),
     BUILDER("builder"),
     SOURCE("source"),
