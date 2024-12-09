@@ -6,8 +6,8 @@ public enum Config {
     PORT("9092"),
     BUILDER("builder"),
     SOURCE("source"),
-    DURATION_MINUTES("2"),
-    LATENCY_MILLIS("1000"),
+    DURATION_MINUTES("5"),
+    LATENCY_MILLIS("500"),
     ANOMALY_KW("0.25"),//25%
     THEARDS("1000");
 

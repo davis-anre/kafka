@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="0b4edb34-37be-4be3-9e3c-eb6ce4633f31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/Topics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/Topics.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/kafka.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/kafka.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -164,7 +162,7 @@
       <workItem from="1733545312705" duration="6783000" />
       <workItem from="1733552809810" duration="330000" />
       <workItem from="1733553340530" duration="345000" />
-      <workItem from="1733722861883" duration="4329000" />
+      <workItem from="1733722861883" duration="6836000" />
     </task>
     <servers />
   </component>
