@@ -2,10 +2,10 @@ package org.isaacanteparac;
 
 public enum Topics {
 
-    DURAN_IN("duran-IN"),
-    DURAN_OUT("duran-OUT"),
-    SAMBORONDON_IN("samborondon-IN"),
-    SAMBORONDON_OUT("samborondon-OUT");
+    DURAN_PRODUCER("duran-IN"),
+    DURAN_CONSUMER("duran-OUT"),
+    SAMBORONDON_PRODUCER("samborondon-IN"),
+    SAMBORONDON_CONSUMER("samborondon-OUT");
 
     private String name;
 

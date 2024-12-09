@@ -8,7 +8,8 @@ public enum Config {
     SOURCE("source"),
     DURATION_MINUTES("2"),
     LATENCY_MILLIS("1000"),
-    ANOMALY_KW("0.25");//25%
+    ANOMALY_KW("0.25"),//25%
+    THEARDS("1000");
 
 
     private final String getString;

@@ -1,6 +1,8 @@
 package org.isaacanteparac;
 
 import com.fasterxml.uuid.Generators;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.streams.KafkaStreams;
@@ -26,12 +28,20 @@ public class kafka {
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerProps);
 
-        ExecutorService executorService = Executors.newCachedThreadPool();
+        final int theard = Integer.parseInt(Config.THEARDS.getString());
+        ExecutorService executorService = Executors.newFixedThreadPool(theard);
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < theard; i++) {
             executorService.submit(() -> {
                 try {
-                    startTopic(Topics.DURAN_IN, Topics.DURAN_OUT, Regions.DURAN, producer);
+                    startTopic(Topics.DURAN_PRODUCER, Topics.DURAN_CONSUMER, Regions.DURAN, producer);            startTopic(Topics.SAMBORONDON_PRODUCER, Topics.SAMBORONDON_CONSUMER, Regions.SAMBORONDON, producer);
+                } catch (InterruptedException e) {
+                    System.err.println("Error en DURAN: " + e.getMessage());
+                }
+            });
+            executorService.submit(() -> {
+                try {
+                    startTopic(Topics.SAMBORONDON_PRODUCER, Topics.SAMBORONDON_CONSUMER, Regions.SAMBORONDON, producer);
                 } catch (InterruptedException e) {
                     System.err.println("Error en DURAN: " + e.getMessage());
                 }
@@ -39,9 +49,10 @@ public class kafka {
 
             executorService.submit(() -> {
                 try {
-                    startTopic(Topics.SAMBORONDON_IN, Topics.SAMBORONDON_OUT, Regions.SAMBORONDON, producer);
+                    consumeTopic(Topics.DURAN_CONSUMER);
+                    consumeTopic(Topics.SAMBORONDON_CONSUMER);
                 } catch (InterruptedException e) {
-                    System.err.println("Error en SAMBORONDON: " + e.getMessage());
+                    System.err.println("Error al consumir los tópicos: " + e.getMessage());
                 }
             });
         }
@@ -52,20 +63,20 @@ public class kafka {
     }
 
 
-    public static void startTopic(Topics topic, Topics topicOut, Regions region, KafkaProducer<String, String> producer) throws InterruptedException {
+    public static void startTopic(Topics producerTopic, Topics consumerTopic, Regions region, KafkaProducer<String, String> producer) throws InterruptedException {
         GeneratorData generator = new GeneratorData();
-        generateDataForDuration(topicOut, region, generator, producer);
+        generateDataForDuration(consumerTopic, region, generator, producer);
         // Construcción del flujo de Kafka Streams
         Properties streamsProps = new Properties();
         streamsProps.put("bootstrap.servers", Config.IP.getString() + ":" + Config.PORT.getString());
         streamsProps.put("application.id", "kafka-streams-app");
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, String> source = builder.stream(topic.getName());
+        KStream<String, String> source = builder.stream(producerTopic.getName());
 
 
         // Procesar los datos y enviarlos al tópico de salida
-        source.mapValues(value -> value + " - procesado").to(topic.getName());
+        source.mapValues(value -> value + " - procesado").to(producerTopic.getName());
 
         // Iniciar Kafka Streams
         KafkaStreams streams = new KafkaStreams(builder.build(), streamsProps);
@@ -78,7 +89,7 @@ public class kafka {
 
     // Método para generar y enviar datos a un tópico Kafka
     public static void generateDataForDuration(
-            Topics topicOut,
+            Topics consumerTopic,
             Regions region,
             GeneratorData generator,
             KafkaProducer<String, String> producer
@@ -96,7 +107,7 @@ public class kafka {
                 // Obtener el JSON generado para cada medidor
                 String json = generator.generateElectricityData(id, region.getName());
                 // Enviar datos al tópico de entrada
-                sendToInputTopic(producer, topicOut.getName(), id, json);
+                sendToInputTopic(producer, consumerTopic.getName(), id, json);
             } catch (Exception e) {
                 System.err.println("Error al generar datos: " + e.getMessage());
             }
@@ -108,14 +119,39 @@ public class kafka {
     }
 
     // Método para enviar mensajes a un tópico Kafka
-    public static void sendToInputTopic(KafkaProducer<String, String> producer, String topic, String key, String value) {
-        producer.send(new ProducerRecord<>(topic, key, value), (metadata, exception) -> {
+    public static void sendToInputTopic(KafkaProducer<String, String> producer, String producerTopic, String key, String value) {
+        producer.send(new ProducerRecord<>(producerTopic, key, value), (metadata, exception) -> {
             if (exception != null) {
                 System.err.println("Error al enviar mensaje: " + exception.getMessage());
             } else {
-                System.out.println("Mensaje enviado con éxito al tópico " + topic + " con offset " + metadata.offset());
+                System.out.println("Mensaje enviado con éxito al tópico " + producerTopic + " con offset " + metadata.offset());
             }
         });
+    }
+
+    public static void consumeTopic(Topics consumerTopic) throws InterruptedException {
+        // Configuración del consumidor de Kafka
+        Properties consumerProps = new Properties();
+        consumerProps.put("bootstrap.servers", Config.IP.getString() + ":" + Config.PORT.getString());
+        consumerProps.put("group.id", "consumer-group");
+        consumerProps.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        consumerProps.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        consumerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps);
+        consumer.subscribe(java.util.Collections.singletonList(consumerTopic.getName()));
+
+        while (true) {
+            // Recibir mensajes de Kafka de forma continua
+            consumer.poll(Integer.parseInt(Config.LATENCY_MILLIS.getString())).forEach(record -> {
+                // Procesamiento en paralelo de cada mensaje recibido
+                ExecutorService executorService = Executors.newCachedThreadPool();
+                executorService.submit(() -> {
+                    // Aquí puedes agregar el procesamiento que necesites para cada mensaje recibido
+                    System.out.println("Mensaje recibido del OUT ");
+                });
+            });
+        }
     }
 
 
