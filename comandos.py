@@ -7,14 +7,14 @@ def print_kafka_commands(bootstrap_server):
     """
     print("\n> DURAN Topics")
     print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1 --topic duran-IN")
-    print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1 --topic duran-OUT")
+    print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1000 --topic duran-OUT")
     
     print("\n> DURAN Data Viewing")
     print(f"./kafka-console-consumer.sh --bootstrap-server {bootstrap_server} --topic duran-OUT --from-beginning")
     
     print("\n> SAMBORONDON Topics")
     print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1 --topic samborondon-IN")
-    print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1 --topic samborondon-OUT")
+    print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1000 --topic samborondon-OUT")
     
     print("\n> SAMBORONDON Data Viewing")
     print(f"./kafka-console-consumer.sh --bootstrap-server {bootstrap_server} --topic samborondon-OUT --from-beginning")

@@ -95,7 +95,7 @@ public class kafka {
             String id = uuid1.toString();
             try {
                 String json = generator.generateElectricityData(id, region.getName());
-                sendToInputTopic(producer, consumerTopic.getName(), id, json);
+                sendToInputTopic(producer, consumerTopic.getName(), json);
             } catch (Exception e) {
                 System.err.println("Error al generar datos: " + e.getMessage());
             }
@@ -107,12 +107,13 @@ public class kafka {
     }
 
     // Método para enviar mensajes a un tópico Kafka
-    public static void sendToInputTopic(KafkaProducer<String, String> producer, String consumerTopic, String key, String value) {
-        producer.send(new ProducerRecord<>(consumerTopic, key, value), (metadata, exception) -> {
+    public static void sendToInputTopic(KafkaProducer<String, String> producer, String consumerTopic, String value) {
+        //no se añade key para que tenga una distribucion uniforme entre las 1000 particiones de consumer
+        producer.send(new ProducerRecord<>(consumerTopic, value), (metadata, exception) -> {
             if (exception != null) {
                 System.err.println("Error al enviar mensaje: " + exception.getMessage());
             } else {
-                System.out.println("Mensaje enviado con éxito al tópico " + consumerTopic + " con offset " + metadata.offset());
+                System.out.println("Mensaje enviado: "+ metadata.offset());
             }
         });
     }
