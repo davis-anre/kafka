@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class kafka {
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         // Configuración de Kafka Streams
         Properties producerProps = new Properties();
         producerProps.put("bootstrap.servers", Config.IP.getString() + ":" + Config.PORT.getString());
@@ -26,31 +26,12 @@ public class kafka {
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerProps);
 
-        int threadCount = 100;
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        ExecutorService executorService = Executors.newCachedThreadPool();
 
-        /*Thread thread1 = new Thread(() -> {
-            try {
-                startTopic(Topics.DURAN_IN, Topics.DURAN_OUT, Regions.DURAN, producer);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        Thread thread2 = new Thread(() -> {
-            try {
-                startTopic(Topics.SAMBORONDON_IN, Topics.SAMBORONDON_OUT, Regions.SAMBORONDON, producer);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        // Iniciar los hilos
-        thread1.start();
-        thread2.start();*/
         for (int i = 0; i < 500; i++) {
             executorService.submit(() -> {
                 try {
-                    startTopic(Topics.DURAN_IN, Topics.DURAN_OUT, Regions.DURAN,producer);
+                    startTopic(Topics.DURAN_IN, Topics.DURAN_OUT, Regions.DURAN, producer);
                 } catch (InterruptedException e) {
                     System.err.println("Error en DURAN: " + e.getMessage());
                 }
@@ -58,16 +39,16 @@ public class kafka {
 
             executorService.submit(() -> {
                 try {
-                    startTopic(Topics.SAMBORONDON_IN, Topics.SAMBORONDON_OUT, Regions.SAMBORONDON,producer);
+                    startTopic(Topics.SAMBORONDON_IN, Topics.SAMBORONDON_OUT, Regions.SAMBORONDON, producer);
                 } catch (InterruptedException e) {
                     System.err.println("Error en SAMBORONDON: " + e.getMessage());
                 }
             });
         }
 
-        // Esperar a que todas las tareas finalicen
+// Cierra el ExecutorService cuando termine
         executorService.shutdown();
-        executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+
     }
 
 
