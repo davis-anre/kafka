@@ -11,7 +11,7 @@
 * DURAN
   
   * ./kafka-topics.sh --create --bootstrap-server 192.168.1.4:9092 --replication-factor 1 --partitions 1 --topic duran-IN
-  * ./kafka-topics.sh --create --bootstrap-server 192.168.1.4:9092 --replication-factor 1 --partitions 1 --topic duran-OUT
+  * ./kafka-topics.sh --create --bootstrap-server 192.168.1.4:9092 --replication-factor 1000 --partitions 1 --topic duran-OUT
     
   * VER DATA
     
@@ -21,7 +21,7 @@
 * SAMBORONDON
   
   * ./kafka-topics.sh --create --bootstrap-server 192.168.1.4:9092 --replication-factor 1 --partitions 1 --topic samborondon-IN
-  * ./kafka-topics.sh --create --bootstrap-server 192.168.1.4:9092 --replication-factor 1 --partitions 1 --topic samborondon-OUT
+  * ./kafka-topics.sh --create --bootstrap-server 192.168.1.4:9092 --replication-factor 1 --partitions 1000 --topic samborondon-OUT
   * VER DATA
     
     * ./kafka-console-producer.sh --broker-list 192.168.1.4:9092 --topic samborondon-IN

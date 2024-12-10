@@ -1,16 +1,15 @@
 package org.isaacanteparac;
 
-import com.fasterxml.uuid.Generators;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.KStream;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +26,7 @@ public class kafka {
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerProps);
 
-        final int theard = Integer.parseInt(Config.THEARDS.getString());
+        final int theard = Integer.parseInt(Config.AMOUNT_CONSUMPTION.getString());
         ExecutorService executorService = Executors.newFixedThreadPool(theard);
 
         for (int i = 0; i < theard; i++) {
@@ -64,10 +63,7 @@ public class kafka {
         streamsProps.put("application.id", "kafka-streams-app");
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, String> source = builder.stream(producerTopic.getName());
 
-        // Procesar los datos y enviarlos al tópico de consumo
-        //source.mapValues(value -> value + " - procesado").to(consumerTopic.getName());
 
         // Iniciar Kafka Streams
         KafkaStreams streams = new KafkaStreams(builder.build(), streamsProps);
@@ -78,24 +74,16 @@ public class kafka {
     }
 
     // Método para generar y enviar datos a un tópico Kafka
-    public static void generateDataForDuration(
-            Topics consumerTopic,
-            Regions region,
-            GeneratorData generator,
-            KafkaProducer<String, String> producer
-    ) throws InterruptedException {
+    public static void generateDataForDuration(Topics consumerTopic, Regions region, GeneratorData generator, KafkaProducer<String, String> producer) throws InterruptedException {
 
         int seconds = Integer.parseInt(Config.DURATION_MINUTES.getString()) * 60;
         long startTime = System.currentTimeMillis();
         long endTime = startTime + TimeUnit.SECONDS.toMillis(seconds);
 
         while (System.currentTimeMillis() < endTime) {
-            // Se genera id basado en tiempo, para que no haya repeticiones
-            UUID uuid1 = Generators.timeBasedGenerator().generate();
-            String id = uuid1.toString();
             try {
-                String json = generator.generateElectricityData(id, region.getName());
-                sendToInputTopic(producer, consumerTopic.getName(), json);
+                electricalConsumption dataEC = generator.generateElectricityData(region);
+                sendToInputTopic(producer, consumerTopic, dataEC);
             } catch (Exception e) {
                 System.err.println("Error al generar datos: " + e.getMessage());
             }
@@ -107,17 +95,23 @@ public class kafka {
     }
 
     // Método para enviar mensajes a un tópico Kafka
-    public static void sendToInputTopic(KafkaProducer<String, String> producer, String consumerTopic, String value) {
+    public static void sendToInputTopic(KafkaProducer<String, String> producer, Topics consumerTopic, electricalConsumption dataEC)
+            throws JsonProcessingException {
         //no se añade key para que tenga una distribucion uniforme entre las 1000 particiones de consumer
-        producer.send(new ProducerRecord<>(consumerTopic, value), (metadata, exception) -> {
+        Map<String, Object> partialData = new HashMap<>();
+        partialData.put("consumo_kWh", dataEC.consumo_kWh());
+        partialData.put("timestamp", dataEC.timestamp());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String partialJson = objectMapper.writeValueAsString(partialData);
+
+        producer.send(new ProducerRecord<>(consumerTopic.getName(), dataEC.id_medidor(), partialJson), (metadata, exception) -> {
             if (exception != null) {
                 System.err.println("Error al enviar mensaje: " + exception.getMessage());
             } else {
-                System.out.println("Mensaje enviado: "+ metadata.offset());
+                System.out.println("Mensaje enviado: " + metadata.offset());
             }
         });
     }
-
 
 
 }

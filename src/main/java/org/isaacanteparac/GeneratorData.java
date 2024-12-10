@@ -6,55 +6,61 @@ import java.util.*;
 
 public class GeneratorData {
 
-    private final Map<String, double[]> coordRanges;
+    private final Map<Regions, double[]> coordRanges;
+    private final Map<Regions, List<String>> generatedIds;
     private final Random random;
-    private final ObjectMapper objectMapper;
+
     private final double[] consumptionRange;
 
     // Constructor de la clase que inicializa los valores
     public GeneratorData() {
         this.coordRanges = new HashMap<>();
+        this.generatedIds = new HashMap<>();
         this.random = new Random();
-        this.objectMapper = new ObjectMapper();
-        this.consumptionRange = new double[]{0.5, 100};  // Rango de consumo
+        this.consumptionRange = new double[]{0.5, 100}; // Rango de consumo
 
         // Definir coordenadas para cada región
-        this.coordRanges.put(Regions.SAMBORONDON.getName(), new double[]{-1.9, -1.85, -79.9, -79.85});
-        this.coordRanges.put(Regions.DURAN.getName(), new double[]{-2.1, -2.05, -79.9, -79.85});
+        this.coordRanges.put(Regions.SAMBORONDON, new double[]{-1.9, -1.85, -79.9, -79.85});
+        this.coordRanges.put(Regions.DURAN, new double[]{-2.1, -2.05, -79.9, -79.85});
+
+        // Generar las coordenadas y unirlas en IDs para las regiones
+        preGenerateIds();
+    }
+
+    // Método para generar las coordenadas y sus IDs previamente
+    private void preGenerateIds() {
+        coordRanges.forEach((region, range) -> {
+            List<String> idsList = new ArrayList<>();
+            for (int i = 0; i < Integer.parseInt(Config.AMOUNT_CONSUMPTION.getString()); i++) {
+                double latitude = round(randomInRange(range[0], range[1]), 6);
+                double longitude = round(randomInRange(range[2], range[3]), 6);
+                String id = ids(latitude, longitude, region);
+                idsList.add(id);
+            }
+            generatedIds.put(region, idsList);
+        });
     }
 
     // Método para generar datos de electricidad en tiempo real
-    public String generateElectricityData(String meterId, String region) throws Exception {
-        // Seleccionar región aleatoria
-        //final String region = randomRegion()
-        double[] range = coordRanges.get(region);
+    public electricalConsumption generateElectricityData(Regions region) throws Exception {
+        // Seleccionar un ID aleatorio de la región
+        List<String> ids = generatedIds.get(region);
+        String selectedId = ids.get(random.nextInt(ids.size()));
 
-        // Generar coordenadas dentro del rango
-        double latitude = round(randomInRange(range[0], range[1]), 6);
-        double longitude = round(randomInRange(range[2], range[3]), 6);
+        // Separar el ID en latitud y longitud
+        //String[] parts = selectedId.split("l4t|l0n");
+        //double latitude = Double.parseDouble(parts[0]);
+        //double longitude = Double.parseDouble(parts[1]);
 
         // Generar consumo eléctrico
         double consumption = (random.nextDouble() < Double.parseDouble(Config.ANOMALY_KW.getString()))
                 ? randomInRange(100, 500) // Consumo atípico
                 : randomInRange(consumptionRange[0], consumptionRange[1]);
 
-        // Crear el objeto de datos
-        Map<String, Object> data = new HashMap<>();
-        data.put("id_medidor", meterId);
-        data.put("consumo_kWh", round(consumption, 2));
-        data.put("región", region);
-        data.put("latitud", latitude);
-        data.put("longitud", longitude);
-        data.put("timestamp", new Date().toString());
+        final electricalConsumption data = new electricalConsumption(selectedId, round(consumption, 2),
+                new Date().toString());
 
-        // Convertir a JSON y retornar
-        return objectMapper.writeValueAsString(data);
-    }
-
-    // Selecciona una región aleatoria
-    private String randomRegion() {
-        List<String> regions = new ArrayList<>(coordRanges.keySet());
-        return regions.get(random.nextInt(regions.size()));
+        return data;
     }
 
     // Genera un número aleatorio dentro de un rango dado
@@ -66,5 +72,10 @@ public class GeneratorData {
     private double round(double value, int places) {
         double scale = Math.pow(10, places);
         return Math.round(value * scale) / scale;
+    }
+
+    // Une latitud, longitud y región en un ID único
+    private String ids(double lat, double lon, Regions region) {
+        return lat + "l4t" + lon + "l0n" + region.getName().toLowerCase();
     }
 }

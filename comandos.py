@@ -5,22 +5,30 @@ def print_kafka_commands(bootstrap_server):
     Args:
         bootstrap_server (str): Kafka bootstrap server address
     """
-    print("\n> DURAN Topics")
-    print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1 --topic duran-IN")
-    print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1000 --topic duran-OUT")
-    
-    print("\n> DURAN Data Viewing")
-    print(f"./kafka-console-consumer.sh --bootstrap-server {bootstrap_server} --topic duran-OUT --from-beginning")
-    
-    print("\n> SAMBORONDON Topics")
-    print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1 --topic samborondon-IN")
-    print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1000 --topic samborondon-OUT")
-    
-    print("\n> SAMBORONDON Data Viewing")
-    print(f"./kafka-console-consumer.sh --bootstrap-server {bootstrap_server} --topic samborondon-OUT --from-beginning")
-    
+    print("\n\n> DURAN Topics ////////////////////")
+    view(bootstrap_server, "duran-OUT", "duran-IN")
+
+    print("\n\n> SAMBORONDON Topics  /////////////////////////////////////////////")
+    view(bootstrap_server, "samborondon-OUT", " samborondon-IN")
+
     print("\n> List topics")
     print(f"./kafka-topics.sh --list --bootstrap-server {bootstrap_server}")
+    print("\n\n\n\n\n")
+
+def view(bootstrap_server, consumerTopic, producerTopic):
+    print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1000 --topic {producerTopic}")
+    print(f"./kafka-topics.sh --create --bootstrap-server {bootstrap_server} --replication-factor 1 --partitions 1000 --topic {consumerTopic}")
+    print(f"\n>>> Data Viewing -------------------------------------------------")
+    print(f"./kafka-console-consumer.sh --bootstrap-server {bootstrap_server} --topic {consumerTopic} --from-beginning")
+    print("\n> Ver todas las particiones")
+    print(f"./kafka-topics.sh --bootstrap-server {bootstrap_server} --describe --topic {consumerTopic}")
+    print("\n> Ver la data de una particion, solo se pone el numero de la particion")
+    print(f"./kafka-console-consumer.sh --bootstrap-server {bootstrap_server} --topic {consumerTopic} --partition <nparticion> --offset 0 --from-beginning")
+    print("\n> Ver la data de una particion con su key y data")
+    print(f"./kafka-console-consumer.sh --bootstrap-server {bootstrap_server} --topic {consumerTopic} --partition <nparticion> --from-beginning --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --property value.deserializer=org.apache.kafka.common.serialization.StringDeserializer  --from-beginning")
+    print("\n> Ver todas las particion en con su key y value que se añade")
+    print(f"./kafka-console-consumer.sh --bootstrap-server {bootstrap_server} --topic {consumerTopic} --from-beginning --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning")
+
 
 def main():
     import sys
