@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b4edb34-37be-4be3-9e3c-eb6ce4633f31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/electricalConsumption.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/comandos.py" beforeDir="false" afterPath="$PROJECT_DIR$/comandos.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/Config.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/GeneratorData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/GeneratorData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/electricalConsumption.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/electricalConsumption.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/kafka.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/kafka.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,8 +20,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="Record" />
+        <option value="Kotlin Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -175,7 +173,8 @@
       <workItem from="1733769747855" duration="2434000" />
       <workItem from="1733777028149" duration="426000" />
       <workItem from="1733790163623" duration="668000" />
-      <workItem from="1733798414047" duration="8231000" />
+      <workItem from="1733798414047" duration="11656000" />
+      <workItem from="1733866082923" duration="43000" />
     </task>
     <servers />
   </component>

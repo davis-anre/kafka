@@ -48,9 +48,9 @@ public class GeneratorData {
         String selectedId = ids.get(random.nextInt(ids.size()));
 
         // Separar el ID en latitud y longitud
-        //String[] parts = selectedId.split("l4t|l0n");
-        //double latitude = Double.parseDouble(parts[0]);
-        //double longitude = Double.parseDouble(parts[1]);
+        String[] parts = selectedId.split("l4t|l0n");
+        double latitude = Double.parseDouble(parts[0]);
+        double longitude = Double.parseDouble(parts[1]);
 
         // Generar consumo eléctrico
         double consumption = (random.nextDouble() < Double.parseDouble(Config.ANOMALY_KW.getString()))
@@ -58,7 +58,7 @@ public class GeneratorData {
                 : randomInRange(consumptionRange[0], consumptionRange[1]);
 
         final electricalConsumption data = new electricalConsumption(selectedId, round(consumption, 2),
-                new Date().toString());
+                new Date().toString(), latitude, longitude);
 
         return data;
     }

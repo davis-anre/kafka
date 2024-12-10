@@ -97,10 +97,15 @@ public class kafka {
     // Método para enviar mensajes a un tópico Kafka
     public static void sendToInputTopic(KafkaProducer<String, String> producer, Topics consumerTopic, electricalConsumption dataEC)
             throws JsonProcessingException {
+
         //no se añade key para que tenga una distribucion uniforme entre las 1000 particiones de consumer
         Map<String, Object> partialData = new HashMap<>();
-        partialData.put("consumo_kWh", dataEC.consumo_kWh());
+        partialData.put("consumption_kWh", dataEC.consumption_kWh());
         partialData.put("timestamp", dataEC.timestamp());
+        partialData.put("latitud", (dataEC.latitud()));
+        partialData.put("longitud", (dataEC.longitud()));
+
+
         ObjectMapper objectMapper = new ObjectMapper();
         String partialJson = objectMapper.writeValueAsString(partialData);
 

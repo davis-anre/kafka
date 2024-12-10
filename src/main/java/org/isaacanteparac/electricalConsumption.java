@@ -2,7 +2,8 @@ package org.isaacanteparac;
 
 public record electricalConsumption(
         String id_medidor,
-        double consumo_kWh,
-        String timestamp) {
-
+        double consumption_kWh,
+        String timestamp,
+        double latitud,
+        double longitud) {
 }
