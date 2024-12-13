@@ -104,6 +104,7 @@ public class kafka {
         partialData.put("timestamp", dataEC.timestamp());
         partialData.put("latitud", (dataEC.latitud()));
         partialData.put("longitud", (dataEC.longitud()));
+        partialData.put("region",(dataEC.region().getName().toLowerCase()));
 
 
         ObjectMapper objectMapper = new ObjectMapper();

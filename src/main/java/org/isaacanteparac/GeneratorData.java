@@ -58,7 +58,7 @@ public class GeneratorData {
                 : randomInRange(consumptionRange[0], consumptionRange[1]);
 
         final electricalConsumption data = new electricalConsumption(selectedId, round(consumption, 2),
-                new Date().toString(), latitude, longitude);
+                new Date().toString(), latitude, longitude,region);
 
         return data;
     }

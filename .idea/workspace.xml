@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0b4edb34-37be-4be3-9e3c-eb6ce4633f31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/Config.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/GeneratorData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/GeneratorData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/electricalConsumption.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/electricalConsumption.java" afterDir="false" />
@@ -174,7 +175,10 @@
       <workItem from="1733777028149" duration="426000" />
       <workItem from="1733790163623" duration="668000" />
       <workItem from="1733798414047" duration="11656000" />
-      <workItem from="1733866082923" duration="43000" />
+      <workItem from="1733866082923" duration="553000" />
+      <workItem from="1733891761192" duration="7445000" />
+      <workItem from="1733949873274" duration="2429000" />
+      <workItem from="1733952444692" duration="625000" />
     </task>
     <servers />
   </component>

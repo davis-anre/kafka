@@ -5,5 +5,6 @@ public record electricalConsumption(
         double consumption_kWh,
         String timestamp,
         double latitud,
-        double longitud) {
+        double longitud,
+        Regions region) {
 }
