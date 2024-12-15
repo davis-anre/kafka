@@ -2,11 +2,15 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col, avg
 from pyspark.sql.types import StructType, StringType, DoubleType
 
+#172.23.0.1
+ipHDFS = "192.168.1.14"
+ipKAFKA = "192.168.1.14"
+
 # Crear la sesión de Spark
 # Reemplazar IP con la del PC
 spark = SparkSession.builder \
     .appName("KafkaJSONProcessor") \
-    .config("spark.hadoop.fs.defaultFS", "hdfs://192.168.0.100:9000") \
+    .config("spark.hadoop.fs.defaultFS", f"hdfs://{ipHDFS}:9000") \
     .getOrCreate()
 
 # Definir el esquema del JSON (ajusta según tus datos)
@@ -21,7 +25,7 @@ schema = StructType() \
 # Reemplazar IP con la del PC
 kafka_stream = spark.readStream \
     .format("kafka") \
-    .option("kafka.bootstrap.servers", "192.168.0.100:9092") \
+    .option("kafka.bootstrap.servers", f"{ipKAFKA}:9092") \
     .option("subscribe", "duran-OUT,samborondon-OUT") \
     .load()
 
@@ -69,8 +73,8 @@ query_data = formatted_data_stream.writeStream \
 formatted_data_stream.writeStream \
     .outputMode("append") \
     .format("parquet") \
-    .option("path", "hdfs://192.168.0.100:9000/data/received") \
-    .option("checkpointLocation", "hdfs://192.168.0.100:9000/checkpoints/received") \
+    .option("path", f"hdfs://{ipHDFS}:9000/data/received") \
+    .option("checkpointLocation", f"hdfs://{ipHDFS}:9000/checkpoints/received") \
     .start()
 
 # Escribir el promedio por región en consola y HDFS
@@ -84,8 +88,8 @@ query_avg = formatted_avg_stream.writeStream \
 avg_consumption_stream.writeStream \
     .outputMode("complete") \
     .format("parquet") \
-    .option("path", "hdfs://192.168.0.100:9000/data/average") \
-    .option("checkpointLocation", "hdfs://192.168.0.100:9000/checkpoints/average") \
+    .option("path", f"hdfs://{ipHDFS}:9000/data/average") \
+    .option("checkpointLocation", f"hdfs://{ipHDFS}:9000/checkpoints/average") \
     .start()
 
 # Escribir las anomalías detectadas en consola y HDFS
@@ -99,8 +103,8 @@ query_anomalies = anomalies_stream.writeStream \
 anomalies_stream.writeStream \
     .outputMode("append") \
     .format("parquet") \
-    .option("path", "hdfs://192.168.0.100:9000/data/anomalies") \
-    .option("checkpointLocation", "hdfs://192.168.0.100:9000/checkpoints/anomalies") \
+    .option("path", f"hdfs://{ipHDFS}:9000/data/anomalies") \
+    .option("checkpointLocation", f"hdfs://{ipHDFS}:9000/checkpoints/anomalies") \
     .start()
 
 # Esperar a que los streams terminen
