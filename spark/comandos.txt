@@ -1,0 +1,33 @@
+En la ubicación del archivo docker-compose.yml
+docker-compose up -d
+
+Copiar dsv1.py al contenedor de spark estando en la ubicación de dsv1.py
+docker cp dsv1.py spark-master:/opt/bitnami/spark/bin/
+
+Ejecutar el contenedor de spark
+docker exec -it spark-master bash
+
+Entrar al directorio /bin
+cd bin
+Ejecutar procesar.py dentro del directorio bin
+spark-submit --master spark://172.19.0.4:7077 --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.3 dsv2.py
+
+KAFKA
+docker exec --workdir /opt/kafka/bin/ -it brokerKafka sh
+
+./kafka-topics.sh --create --bootstrap-server 192.168.0.100:9092 --replication-factor 1 --partitions 1 --topic duran-IN
+./kafka-topics.sh --create --bootstrap-server 192.168.0.100:9092 --replication-factor 1000 --partitions 1 --topic duran-OUT
+./kafka-console-producer.sh --broker-list 192.168.0.100:9092 --topic duran-IN
+./kafka-console-consumer.sh --bootstrap-server 192.168.0.100:9092 --topic duran-OUT --from-beginning
+
+./kafka-topics.sh --create --bootstrap-server 192.168.0.100:9092 --replication-factor 1 --partitions 1 --topic samborondon-IN
+./kafka-topics.sh --create --bootstrap-server 192.168.0.100:9092 --replication-factor 1 --partitions 1000 --topic samborondon-OUT
+./kafka-console-producer.sh --broker-list 192.168.0.100:9092 --topic samborondon-IN
+./kafka-console-consumer.sh --bootstrap-server 192.168.0.100:9092 --topic samborondon-OUT --from-beginning
+
+./kafka-topics.sh --list --bootstrap-server 192.168.0.100:9092
+
+./kafka-topics.sh --bootstrap-server 192.168.0.100:9092 --delete --topic samborondon-OUT
+
+{"latitud":4523,"longitud":452,"region":"samborondon","consumption_kWh":45,"timestamp":"hola"}
+{"latitud":4523,"longitud":452,"región":"samborondon","consumo_kWh":45,"id_medidor":456,"timestamp":"hola"}
