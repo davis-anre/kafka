@@ -10,7 +10,7 @@ docker exec -it spark-master bash
 Entrar al directorio /bin
 cd bin
 Ejecutar procesar.py dentro del directorio bin
-spark-submit --master spark://172.19.0.4:7077 --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.3 dsv2.py
+spark-submit --master spark://172.19.0.4:7077 --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.3 dsv3.py
 
 KAFKA
 docker exec --workdir /opt/kafka/bin/ -it brokerKafka sh
