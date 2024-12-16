@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b4edb34-37be-4be3-9e3c-eb6ce4633f31" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spark/comandos.txt" beforeDir="false" afterPath="$PROJECT_DIR$/spark/comandos.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spark/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/spark/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spark/dsv3.py" beforeDir="false" afterPath="$PROJECT_DIR$/spark/dsv3.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/GeneratorData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/GeneratorData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/kafka.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isaacanteparac/kafka.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,6 +184,7 @@
       <workItem from="1733952444692" duration="625000" />
       <workItem from="1734238592300" duration="7584000" />
       <workItem from="1734246615790" duration="6811000" />
+      <workItem from="1734382022626" duration="1655000" />
     </task>
     <servers />
   </component>

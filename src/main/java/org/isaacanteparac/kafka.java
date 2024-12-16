@@ -115,6 +115,7 @@ public class kafka {
                 System.err.println("Error al enviar mensaje: " + exception.getMessage());
             } else {
                 System.out.println("Mensaje enviado: " + metadata.offset());
+
             }
         });
     }

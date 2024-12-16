@@ -2,6 +2,8 @@ package org.isaacanteparac;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class GeneratorData {
@@ -52,15 +54,27 @@ public class GeneratorData {
         double latitude = Double.parseDouble(parts[0]);
         double longitude = Double.parseDouble(parts[1]);
 
+
         // Generar consumo eléctrico
         double consumption = (random.nextDouble() < Double.parseDouble(Config.ANOMALY_KW.getString()))
                 ? randomInRange(100, 500) // Consumo atípico
                 : randomInRange(consumptionRange[0], consumptionRange[1]);
 
         final electricalConsumption data = new electricalConsumption(selectedId, round(consumption, 2),
-                new Date().toString(), latitude, longitude,region);
+                Time_(), latitude, longitude,region);
 
         return data;
+    }
+
+    private String Time_(){
+        LocalDateTime now = LocalDateTime.now();
+
+        // Formato deseado: "yyyy-MM-dd HH:mm:ss"
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // Convertir la fecha y hora actual al formato especificado como String
+        String formattedDate = now.format(formatter);
+        return formattedDate;
     }
 
     // Genera un número aleatorio dentro de un rango dado
